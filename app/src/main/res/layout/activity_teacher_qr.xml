@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal"
+    tools:context=".TEACHER_QR">
+
+    <!-- Title TextView -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Generate QR Code for Attendance"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp"/>
+
+    <EditText
+        android:id="@+id/subjectCodeEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Subject Code"
+        android:inputType="text"
+        android:maxLines="1"
+        android:layout_margin="16dp"/>
+    <!-- Button to generate QR code -->
+    <Button
+        android:id="@+id/generateQrButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Generate QR Code"
+        android:layout_marginBottom="24dp"
+        android:enabled="false"/>
+
+    <!-- TextView to display session info -->
+    <TextView
+        android:id="@+id/sessionInfoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp"
+        android:text="No active session"/>
+
+    <!-- QR Code ImageView -->
+    <ImageView
+        android:id="@+id/qrCodeImageView"
+        android:layout_width="256dp"
+        android:layout_height="256dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="QR Code"
+        android:visibility="gone"/>
+
+    <!-- Instructions -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1. Click 'Generate QR Code'\n2. Display to students\n3. Students scan to mark attendance"
+        android:textSize="14sp"
+        android:layout_marginTop="16dp"
+        android:textAlignment="center"/>
+    <TextView
+        android:id="@+id/attendanceRecordsTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="No attendance records yet"
+        android:textSize="14sp"
+        android:maxLines="10"
+        android:scrollbars="vertical"/>
+    <Button
+        android:id="@+id/endSessionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End Session"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"/>
+
+</LinearLayout>

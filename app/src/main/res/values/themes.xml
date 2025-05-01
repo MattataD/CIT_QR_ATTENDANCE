@@ -1,0 +1,8 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.AttendanceCheck" parent="Theme.AppCompat.Light.DarkActionBar">
+    </style>
+    <style name="Theme.AttendanceCheck" parent="Base.Theme.AttendanceCheck" />
+    <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+    <item name="android:color">#8CAB0D</item>
+    </style>
+</resources>
