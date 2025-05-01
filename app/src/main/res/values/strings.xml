@@ -63,4 +63,5 @@
     <string name="attendance_failed">Failed to record attendance: %1$s</string>
     <string name="attendance_already_recorded">Attendance already recorded for this session</string>
 
+
 </resources>

@@ -155,8 +155,8 @@ class TEACHER_QR : AppCompatActivity() {
     }
 
     private fun generateQrCode() {
-        if (currentSubjectCode == null) {
-            Toast.makeText(this, "Subject code not available", Toast.LENGTH_SHORT).show()
+        if (currentSubjectCode.isNullOrBlank()) {
+            Toast.makeText(this, "Please enter a valid subject code", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -191,16 +191,13 @@ class TEACHER_QR : AppCompatActivity() {
     }
 
     private fun createQrCodeContent(sessionId: String?, subjectCode: String?): String? {
-        return try {
-            val json = JSONObject()
-            json.put("sessionId", sessionId)
-            json.put("subjectCode", subjectCode)
-            json.toString()
-        } catch (e: Exception) {
-            Log.e(TAG, "Error creating JSON: ${e.message}")
-            null
+        if (sessionId == null || subjectCode == null) {
+            return null
         }
+
+        return QRCodeUtils.createAttendanceQRContent(sessionId, subjectCode)
     }
+
 
     private fun generateQrCodeImage(data: String): Bitmap? {
         return try {

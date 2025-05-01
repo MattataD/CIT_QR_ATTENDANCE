@@ -407,10 +407,14 @@ class student_qr : AppCompatActivity() {
         barcodeScanner.process(image)
             .addOnSuccessListener { barcodes ->
                 if (barcodes.isNotEmpty()) {
-                    barcodes.first().rawValue?.let { qrData ->
-                        lastScannedQRData = qrData
+                    val rawValue = barcodes.first().rawValue
+                    if (rawValue != null && QRCodeUtils.isValidAttendanceQR(rawValue)) {
+                        lastScannedQRData = rawValue
                         resultTextView.text = "QR code detected! Switching to face verification..."
                         switchToFaceRecognitionMode()
+                    } else {
+                        // Continue scanning - invalid QR format but don't show error
+                        Log.d("QRScan", "Invalid QR format detected")
                     }
                 }
             }
@@ -514,56 +518,58 @@ class student_qr : AppCompatActivity() {
     }
 
     private fun processScannedData(qrData: String) {
-        try {
-            val json = JSONObject(qrData)
-            val sessionId = json.getString("sessionId")
-            val subjectCode = json.getString("subjectCode")
+        // Use the new utility class to parse QR data
+        val sessionInfo = QRCodeUtils.parseAttendanceQR(qrData)
 
-            // First verify the session is still active
-            firestore.collection("attendance_sessions").document(sessionId)
-                .get()
-                .addOnSuccessListener { sessionDoc ->
-                    // Check if session has ended
-                    if (sessionDoc.getTimestamp("endTime") != null) {
-                        showUserMessage("This session has already ended")
-                        resetAfterProcessing()
-                        return@addOnSuccessListener
-                    }
-
-                    // Verify user is logged in
-                    val user = firebaseAuth.currentUser ?: run {
-                        showUserMessage("User not logged in")
-                        resetAfterProcessing()
-                        return@addOnSuccessListener
-                    }
-
-                    // Get user data
-                    firestore.collection("users").document(user.uid)
-                        .get()
-                        .addOnSuccessListener { userDoc ->
-                            val name = userDoc.getString("name") ?: "Unknown"
-                            val tupid = userDoc.getString("tupid") ?: "Unknown"
-                            val section = userDoc.getString("section") ?: "Unknown"
-
-                            recordAttendance(sessionId,subjectCode,user.uid,name,tupid,section)
-
-                        }
-                        .addOnFailureListener { e ->
-                            showUserMessage("Failed to fetch user data")
-                            Log.e("UserData", "Fetch failed", e)
-                            resetAfterProcessing()
-                        }
-                }
-                .addOnFailureListener { e ->
-                    showUserMessage("Failed to verify session status")
-                    Log.e("SessionCheck", "Verification failed", e)
-                    resetAfterProcessing()
-                }
-        } catch (e: Exception) {
-            showUserMessage("Invalid QR code format")
-            Log.e("QRParse", "Invalid QR data", e)
+        if (sessionInfo == null) {
+            showUserMessage("Invalid QR code format. Please try again.")
             resetAfterProcessing()
+            return
         }
+
+        // Access parsed data
+        val sessionId = sessionInfo.sessionId
+        val subjectCode = sessionInfo.subjectCode
+
+        // First verify the session is still active
+        firestore.collection("attendance_sessions").document(sessionId)
+            .get()
+            .addOnSuccessListener { sessionDoc ->
+                // Check if session has ended
+                if (sessionDoc.getTimestamp("endTime") != null) {
+                    showUserMessage("This session has already ended")
+                    resetAfterProcessing()
+                    return@addOnSuccessListener
+                }
+
+                // Verify user is logged in
+                val user = firebaseAuth.currentUser ?: run {
+                    showUserMessage("User not logged in")
+                    resetAfterProcessing()
+                    return@addOnSuccessListener
+                }
+
+                // Get user data
+                firestore.collection("users").document(user.uid)
+                    .get()
+                    .addOnSuccessListener { userDoc ->
+                        val name = userDoc.getString("name") ?: "Unknown"
+                        val tupid = userDoc.getString("tupid") ?: "Unknown"
+                        val section = userDoc.getString("section") ?: "Unknown"
+
+                        recordAttendance(sessionId, subjectCode, user.uid, name, tupid, section)
+                    }
+                    .addOnFailureListener { e ->
+                        showUserMessage("Failed to fetch user data")
+                        Log.e("UserData", "Fetch failed", e)
+                        resetAfterProcessing()
+                    }
+            }
+            .addOnFailureListener { e ->
+                showUserMessage("Failed to verify session status")
+                Log.e("SessionCheck", "Verification failed", e)
+                resetAfterProcessing()
+            }
     }
 
     private fun recordAttendance(sessionId: String,subjectCode: String,studentId: String,studentName: String,studentTupId: String,studentSection: String ){
