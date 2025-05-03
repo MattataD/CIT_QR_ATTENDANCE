@@ -177,8 +177,12 @@ class signup: AppCompatActivity() {
                 if (role == "student") {
                     showFaceRegistrationButton(userId, email, tupid, name, role)
                     showToast("Account created! Proceed to face registration.")
-                } else {
+                } else if (role == "teacher") {
+                    // For teachers, navigate to the teacher dashboard after successful account creation
                     showToast("Teacher account created successfully")
+                    navigateToTeacherDashboard(userId)
+                } else {
+                    showToast("Account created successfully")
                     navigateToLogin()
                 }
 
@@ -189,6 +193,22 @@ class signup: AppCompatActivity() {
             } finally {
                 hideProgress()
             }
+        }
+    }
+
+    private fun navigateToTeacherDashboard(userId: String) {
+        try {
+            Log.d(TAG, "Navigating to teacher dashboard with userId: $userId")
+            val intent = Intent(this, TEACHER_QR::class.java).apply {
+                putExtra("USER_ID", userId)
+            }
+            startActivity(intent)
+            finishAffinity()
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to navigate to teacher dashboard: ${e.message}", e)
+            showToast("Error launching teacher dashboard: ${e.message}")
+            // Fallback to login if there's an error
+            navigateToLogin()
         }
     }
 

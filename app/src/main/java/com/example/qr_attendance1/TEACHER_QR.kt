@@ -49,6 +49,23 @@ class TEACHER_QR : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
         mAuth = FirebaseAuth.getInstance()
 
+        // Get userId from intent if provided
+        if (intent.hasExtra("USER_ID")) {
+            currentUserID = intent.getStringExtra("USER_ID") ?: ""
+            Log.d(TAG, "Received userId from intent: $currentUserID")
+        } else {
+            // Fall back to current user if not provided in intent
+            val currentUser = mAuth.currentUser
+            if (currentUser != null) {
+                currentUserID = currentUser.uid
+                Log.d(TAG, "Using current Firebase user ID: $currentUserID")
+            } else {
+                Toast.makeText(this, "Please sign in to continue", Toast.LENGTH_SHORT).show()
+                finish()
+                return
+            }
+        }
+
         // UI Elements
         generateQrButton = findViewById(R.id.generateQrButton)
         endSessionButton = findViewById(R.id.endSessionButton)
@@ -57,17 +74,11 @@ class TEACHER_QR : AppCompatActivity() {
         subjectCodeEditText = findViewById(R.id.subjectCodeEditText)
         attendanceRecordsTextView = findViewById(R.id.attendanceRecordsTextView)
 
-
+        // Initially disable the generate button until we've loaded data
+        generateQrButton.isEnabled = false
         endSessionButton.setOnClickListener { endCurrentSession() }
 
-        val currentUser = mAuth.currentUser
-        if (currentUser != null) {
-            currentUserID = currentUser.uid
-            loadSavedSubjectCode()
-        } else {
-            Toast.makeText(this, "Please sign in to continue", Toast.LENGTH_SHORT).show()
-            finish()
-        }
+        loadSavedSubjectCode()
 
         generateQrButton.setOnClickListener {
             val enteredCode = subjectCodeEditText.text.toString().trim()
@@ -132,11 +143,14 @@ class TEACHER_QR : AppCompatActivity() {
                 if (currentSubjectCode != null) {
                     Log.d(TAG, "Subject code: $currentSubjectCode")
                     subjectCodeEditText.setText(currentSubjectCode)
-                    generateQrButton.isEnabled = true
                 }
+                // Always enable the button, even if subjectCode is null
+                generateQrButton.isEnabled = true
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Failed to load Subject Code", Toast.LENGTH_SHORT).show()
+                // Even if loading fails, enable the button so user can enter a new code
+                generateQrButton.isEnabled = true
             }
     }
 
