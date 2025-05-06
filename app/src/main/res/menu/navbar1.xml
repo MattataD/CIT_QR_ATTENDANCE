@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="qr"
+        android:id="@+id/teacherqr"
+        android:icon="@drawable/qr"
+        />
+    <item android:title="Record"
+        android:id="@+id/record"
+        android:icon="@drawable/recorder"
+    />
+    <item android:title="Logout"
+        android:id="@+id/LOGOUT"
+        android:icon="@drawable/baseline_logout_24"
+        />
+</menu>

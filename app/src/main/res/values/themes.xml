@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Base.Theme.AttendanceCheck" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="Base.Theme.AttendanceCheck" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
     <style name="Theme.AttendanceCheck" parent="Base.Theme.AttendanceCheck" />
     <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">

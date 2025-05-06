@@ -1,83 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="center_horizontal"
+    android:background="@drawable/image24"
     tools:context=".TEACHER_QR">
 
-    <!-- Title TextView -->
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="28dp"
+        android:src="@drawable/icon1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5" />
 
     <TextView
+        android:id="@+id/welcomeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Generate QR Code for Attendance"
+        android:layout_marginTop="16dp"
+        android:gravity="center_horizontal"
+        android:text="Welcome Teacher!"
+        android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:layout_marginBottom="24dp"/>
+        app:layout_constraintTop_toBottomOf="@id/logoImageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
         android:id="@+id/subjectCodeEditText"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/custom_button"
         android:hint="Enter Subject Code"
         android:inputType="text"
         android:maxLines="1"
-        android:layout_margin="16dp"/>
-    <!-- Button to generate QR code -->
-    <Button
-        android:id="@+id/generateQrButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Generate QR Code"
-        android:layout_marginBottom="24dp"
-        android:enabled="false"/>
+        android:padding="12dp"
+        app:layout_constraintTop_toBottomOf="@id/welcomeTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- TextView to display session info -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/generateQrButton"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginHorizontal="64dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/custom_button"
+        android:text="Generate QR Code"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/subjectCodeEditText" />
+
     <TextView
         android:id="@+id/sessionInfoTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:layout_marginBottom="16dp"
-        android:text="No active session"/>
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="16dp"
+        android:gravity="center"
+        android:text="No active session"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/generateQrButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- QR Code ImageView -->
     <ImageView
         android:id="@+id/qrCodeImageView"
-        android:layout_width="256dp"
-        android:layout_height="256dp"
-        android:layout_marginBottom="16dp"
-        android:contentDescription="QR Code"
-        android:visibility="gone"/>
-
-    <!-- Instructions -->
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1. Click 'Generate QR Code'\n2. Display to students\n3. Students scan to mark attendance"
-        android:textSize="14sp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:layout_marginTop="16dp"
-        android:textAlignment="center"/>
-    <TextView
-        android:id="@+id/attendanceRecordsTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="No attendance records yet"
-        android:textSize="14sp"
-        android:maxLines="10"
-        android:scrollbars="vertical"/>
-    <Button
-        android:id="@+id/endSessionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="End Session"
-        android:layout_marginTop="8dp"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/sessionInfoTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-</LinearLayout>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/endSessionButton"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="64dp"
+        android:background="@drawable/custom_button"
+        android:text="End Session"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/qrCodeImageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#566F39"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:menu="@menu/navbar1"
+        app:itemIconTint="@color/black"
+        app:itemIconSize="30dp"
+        app:itemActiveIndicatorStyle="@style/App.Custom.Indicator" />
+    
+
+</androidx.constraintlayout.widget.ConstraintLayout>
